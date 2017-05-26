@@ -1,3 +1,5 @@
+package Model;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Random;
@@ -17,12 +19,14 @@ public class Filter {
     boolean useMurmur2;
     boolean useMurmur3;
     long seed;
+    int resetThresh;
+    int uniqueInserts;
 
-    public Filter(int size, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, long seed){
+    public Filter(int filterSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, long seed, int resetThresh, int uniqueInserts){
         actualList = new ArrayList<Integer>();
-        bloomFilter = new boolean[size];
+        bloomFilter = new boolean[filterSize];
 
-        this.filterSize = size;
+        this.filterSize = filterSize;
 
         this.useMurmur1 = useMurmur1;
         this.useMurmur2 = useMurmur2;
@@ -30,7 +34,10 @@ public class Filter {
 
         this.seed = seed;
 
-        System.out.println("Created filter with Size: " + size);
+        this.resetThresh = resetThresh;
+        this.uniqueInserts = uniqueInserts;
+
+        System.out.println("Created filter with Size: " + filterSize);
     }
 
 
@@ -42,6 +49,15 @@ public class Filter {
             }
         }else{
             this.actualList.add(value);
+        }
+    }
+
+    public void runSimulation(){
+        int x = 0;
+        Random r = new Random(System.currentTimeMillis());
+        while(x < this.uniqueInserts){
+            this.insert(r.nextInt(1000000000));
+            x++;
         }
     }
 
@@ -86,10 +102,6 @@ public class Filter {
                 ((useMurmur1 && murmur1Result)|| !useMurmur1 ) &&
                 ((useMurmur2 && murmur2Result)|| !useMurmur2) &&
                 ((useMurmur3 && murmur3Result) || !useMurmur3);
-    }
-
-    public void resetFilter(){
-        bloomFilter = new boolean[this.filterSize];
     }
 
     public boolean[] getBloomFilter(){

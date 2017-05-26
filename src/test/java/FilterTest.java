@@ -1,7 +1,7 @@
+import Model.Filter;
 import com.sangupta.murmur.Murmur1;
 import com.sangupta.murmur.Murmur2;
 import com.sangupta.murmur.Murmur3;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ public class FilterTest {
     }
     @Test
     public void AddItemToFilter() {
-        this.f = new Filter(1000, true, true, true, randomSeed);
+        this.f = new Filter(1000, true, true, true, randomSeed,100, 100);
         this.f.insert(127127127);
         assertTrue(this.f.testFilter(127127127));
         assertFalse(this.f.contains(111111111));
@@ -36,7 +36,7 @@ public class FilterTest {
         int filterSize = 10;
 
         byte[] bytes = BigInteger.valueOf(testVal).toByteArray();
-        f = new Filter(filterSize, true, false, false, randomSeed);
+        f = new Filter(filterSize, true, false, false, randomSeed,100,100);
         f.insert(testVal);
         assertTrue(f.getBloomFilter()[(int)(Murmur1.hash(bytes, bytes.length, randomSeed) % filterSize)]);
 
@@ -47,7 +47,7 @@ public class FilterTest {
         int testVal = 111111111;
         int filterSize = 10;
         byte[] bytes = BigInteger.valueOf(testVal).toByteArray();
-        f = new Filter(filterSize, false, true, false, randomSeed);
+        f = new Filter(filterSize, false, true, false, randomSeed,100,100);
         f.insert(testVal);
         assertTrue(f.getBloomFilter()[(int)(Murmur2.hash(bytes, bytes.length, randomSeed) % filterSize)]);
     }
@@ -57,7 +57,7 @@ public class FilterTest {
         int testVal = 111111111;
         int filterSize = 10;
         byte[] bytes = BigInteger.valueOf(testVal).toByteArray();
-        f = new Filter(filterSize, false, false, true, randomSeed);
+        f = new Filter(filterSize, false, false, true, randomSeed,100,100);
         f.insert(testVal);
         assertTrue(f.getBloomFilter()[(int)(Murmur3.hash_x86_32(bytes, bytes.length, randomSeed) % filterSize)]);
 

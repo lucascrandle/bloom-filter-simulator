@@ -23,17 +23,19 @@ public class Application {
             gui g = new gui();
             Application a = new Application(g);
         }else{
-            if(args.length == 6){
+            if(args.length == 7){
                 int filterSize = Integer.parseInt(args[0]);
-                boolean useMurmur1 =  new Boolean(args[1]);
-                boolean useMurmur2 =  new Boolean(args[2]);
-                boolean useMurmur3 =  new Boolean(args[3]);
-                int uniqueInserts = Integer.parseInt(args[4]);
-                int checkCount = Integer.parseInt(args[5]);
+                int randomSize = Integer.parseInt(args[1]);
+                boolean useMurmur1 =  new Boolean(args[2]);
+                boolean useMurmur2 =  new Boolean(args[3]);
+                boolean useMurmur3 =  new Boolean(args[4]);
+                int uniqueInserts = Integer.parseInt(args[5]);
+                int checkCount = Integer.parseInt(args[6]);
                 System.out.println(checkCount);
-                Filter f = new Filter(filterSize, useMurmur1, useMurmur2, useMurmur3, uniqueInserts);
+                Filter f = new Filter(filterSize, randomSize, useMurmur1, useMurmur2, useMurmur3, uniqueInserts);
                 f.runSimulation();
-                System.out.println("Check Count: " + f.runCheckSimulation(checkCount));
+                int[] results = f.runCheckSimulation(checkCount);
+                System.out.println("Check Count: " + results[0] + " false Positive: " + results[1]);
             }else{
                 System.out.println("Incorrect Numbers of Args");
             }
@@ -51,7 +53,7 @@ public class Application {
         g.setRunButtonListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 g.setProgramStatus("Running...");
-                f = new Filter(g.getFilterSize(), g.getUseMurmur1(), g.getUseMurmur2(), g.getUseMurmur3(), g.getUniqueWordCount());
+                f = new Filter(g.getFilterSize(), g.getRandomSize(), g.getUseMurmur1(), g.getUseMurmur2(), g.getUseMurmur3(), g.getUniqueWordCount());
                 f.runSimulation();
                 g.setProgramStatus("Complete");
             }
@@ -81,7 +83,7 @@ public class Application {
         g.setcheckSimulationButtonListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    g.setHitCount(f.runCheckSimulation(Integer.parseInt(g.getCheckTryCount())));
+                    g.setCheckSimulationVariables(f.runCheckSimulation(Integer.parseInt(g.getCheckTryCount())));
                 }catch(Exception exc){
                     g.setCheckTextStatus("Invalid try Count");
                 }

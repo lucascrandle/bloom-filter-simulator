@@ -17,10 +17,10 @@ public class gui {
     private JTextField textField_1;
     private JTextField filterSizeField;
     private JTextField uniqueWordField;
-    private JTextField checkSimulationTryCount;
+    private JTextField checkSimulationTryCount,randomSizeField;
     private JLabel checkTextLabel;
     private JLabel statusText;
-    private JLabel hitCountLabel, hitCount;
+    private JLabel hitCountLabel, hitCount, falsePositiveCount;
     private JCheckBox checkBoxUseMurmur1;
     private JCheckBox checkBoxUseMurmur2;
     private JCheckBox checkBoxUseMurmur3;
@@ -124,10 +124,29 @@ public class gui {
         hitCount = new JLabel("");
         hitCount.setBounds(106, 453, 56, 16);
         panel.add(hitCount);
+
+        falsePositiveCount = new JLabel("");
+        falsePositiveCount.setBounds(106, 482, 56, 16);
+        panel.add(falsePositiveCount);
+
+        JLabel falsePositiveCountLabel = new JLabel("False Positives");
+        falsePositiveCountLabel.setBounds(8, 482, 91, 16);
+        panel.add(falsePositiveCountLabel);
+
+        JLabel lblNewLabel_4 = new JLabel("Random Size");
+        lblNewLabel_4.setBounds(8, 224, 113, 16);
+        panel.add(lblNewLabel_4);
+
+        randomSizeField = new JTextField();
+        randomSizeField.setBounds(148, 221, 116, 22);
+        panel.add(randomSizeField);
+        randomSizeField.setColumns(10);
+
     }
 
-    public void setHitCount(int count){
-        this.hitCount.setText(count+"");
+    public void setCheckSimulationVariables(int[] count){
+        this.hitCount.setText(count[0]+"");
+        this.falsePositiveCount.setText(count[1]+"");
     }
     public String getCheckTryCount(){
         return checkSimulationTryCount.getText();
@@ -155,7 +174,9 @@ public class gui {
     public void setRunButtonListener(ActionListener listener){
         this.btnRun.addActionListener(listener);
     }
-
+    public int getRandomSize(){
+        return Integer.parseInt(randomSizeField.getText());
+    }
     public boolean getUseMurmur1(){
         return checkBoxUseMurmur1.isSelected();
     }

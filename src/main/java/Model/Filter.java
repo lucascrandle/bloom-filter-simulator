@@ -14,16 +14,18 @@ import com.sangupta.murmur.Murmur3;
 public class Filter {
     ArrayList<Integer> actualList;
     boolean[] bloomFilter;
-    int filterSize;
+    int filterSize, randomSize,uniqueInserts;
     boolean useMurmur1;
     boolean useMurmur2;
     boolean useMurmur3;
     long seed;
-    int uniqueInserts;
 
-    public Filter(int filterSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, long seed, int uniqueInserts){
+    //Allow seed to be set for testing
+    public Filter(int filterSize, int randomSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, long seed, int uniqueInserts){
         actualList = new ArrayList<Integer>();
         bloomFilter = new boolean[filterSize];
+
+        this.randomSize = randomSize;
 
         this.filterSize = filterSize;
 
@@ -37,14 +39,15 @@ public class Filter {
 
         System.out.println("Created filter with Size: " + filterSize);
     }
-    public Filter(int filterSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, int uniqueInserts){
-        this(filterSize, useMurmur1, useMurmur2,useMurmur3,(new Random()).nextLong(), uniqueInserts);
+    public Filter(int filterSize, int randomSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, int uniqueInserts){
+        this(filterSize, randomSize, useMurmur1, useMurmur2,useMurmur3,(new Random()).nextLong(), uniqueInserts);
     }
 
     private void add(int value){
+//        System.out.println("Inserting Int: " + value);
         //leverage bloom filter to skip checking for multiple inserts.
-        if(!this.contains(value)){
-            if(!this.actualList.contains(value)){
+        if(!this.testFilter(value)){
+            if(!this.contains(value)){
                 this.actualList.add(value);
             }
         }else{
@@ -68,25 +71,32 @@ public class Filter {
         int x = 0;
         Random r = new Random(System.currentTimeMillis());
         while(x < this.uniqueInserts){
-            this.insert(r.nextInt(1000000000));
+            this.insert(r.nextInt(randomSize));
             x++;
         }
     }
 
-    public int runCheckSimulation(int tryCount){
+    public int[] runCheckSimulation(int tryCount){
         Random r = new Random(System.currentTimeMillis());
         int countInSet = 0;
+        int falsePositive = 0;
         for(int x = 0; x<tryCount;x++){
-            if(this.testFilter(r.nextInt(1000000000))){
-                countInSet ++;
+            int nextIntTest = r.nextInt(randomSize);
+//            System.out.println("Trying Int: " + nextIntTest);
+            if(this.testFilter(nextIntTest)){
+                countInSet++;
+                if(!this.contains(nextIntTest)){
+                    falsePositive++;
+//                    System.out.println("contains");
+                }
             }
         }
-        return countInSet;
+        return (new int[]{countInSet, falsePositive});
     }
 
     public void insert(int value){
         add(value);
-
+//        System.out.println("Size: " + this.actualList.size());
         byte[] bytes;
 
         bytes = BigInteger.valueOf(value).toByteArray();
@@ -109,7 +119,7 @@ public class Filter {
 
     public boolean testFilter(int value){
         byte[] bytes = BigInteger.valueOf(value).toByteArray();
-
+//        System.out.println("Actual Contains: " + this.actualList.contains(value));
         boolean murmur1Result = false;
         boolean murmur2Result = false;
         boolean murmur3Result = false;

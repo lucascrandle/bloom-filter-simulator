@@ -19,10 +19,9 @@ public class Filter {
     boolean useMurmur2;
     boolean useMurmur3;
     long seed;
-    int resetThresh;
     int uniqueInserts;
 
-    public Filter(int filterSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, long seed, int resetThresh, int uniqueInserts){
+    public Filter(int filterSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, long seed, int uniqueInserts){
         actualList = new ArrayList<Integer>();
         bloomFilter = new boolean[filterSize];
 
@@ -34,12 +33,13 @@ public class Filter {
 
         this.seed = seed;
 
-        this.resetThresh = resetThresh;
         this.uniqueInserts = uniqueInserts;
 
         System.out.println("Created filter with Size: " + filterSize);
     }
-
+    public Filter(int filterSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, int uniqueInserts){
+        this(filterSize, useMurmur1, useMurmur2,useMurmur3,(new Random()).nextLong(), uniqueInserts);
+    }
 
     private void add(int value){
         //leverage bloom filter to skip checking for multiple inserts.
@@ -52,6 +52,18 @@ public class Filter {
         }
     }
 
+    public String checkInput(String input){
+        try{
+            if(this.testFilter(Integer.parseInt(input))){
+                return "Possibly Contains Word";
+            }else{
+                return "Does Not Contain";
+            }
+        }catch(Exception e){
+            return "Invalid";
+        }
+    }
+
     public void runSimulation(){
         int x = 0;
         Random r = new Random(System.currentTimeMillis());
@@ -59,6 +71,17 @@ public class Filter {
             this.insert(r.nextInt(1000000000));
             x++;
         }
+    }
+
+    public int runCheckSimulation(int tryCount){
+        Random r = new Random(System.currentTimeMillis());
+        int countInSet = 0;
+        for(int x = 0; x<tryCount;x++){
+            if(this.testFilter(r.nextInt(1000000000))){
+                countInSet ++;
+            }
+        }
+        return countInSet;
     }
 
     public void insert(int value){

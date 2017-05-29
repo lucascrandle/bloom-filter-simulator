@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -16,13 +17,15 @@ public class gui {
     private JTextField textField_1;
     private JTextField filterSizeField;
     private JTextField uniqueWordField;
-    private JTextField resetThreshold;
+    private JTextField checkSimulationTryCount;
     private JLabel checkTextLabel;
     private JLabel statusText;
+    private JLabel hitCountLabel, hitCount;
     private JCheckBox checkBoxUseMurmur1;
     private JCheckBox checkBoxUseMurmur2;
     private JCheckBox checkBoxUseMurmur3;
     private JButton btnRun;
+    private JButton btnRunSimulation;
 
     /**
      * Create the application.
@@ -66,15 +69,6 @@ public class gui {
         lblCheckWord.setBounds(8, 526, 91, 16);
         panel.add(lblCheckWord);
 
-        JLabel lblResetPoint = new JLabel("Reset Threshold");
-        lblResetPoint.setBounds(8, 134, 128, 16);
-        panel.add(lblResetPoint);
-
-        resetThreshold = new JTextField();
-        resetThreshold.setBounds(148, 131, 116, 22);
-        panel.add(resetThreshold);
-        resetThreshold.setColumns(10);
-
         JLabel lblNewLabel_1 = new JLabel("Size Of Model.Filter");
         lblNewLabel_1.setBounds(8, 163, 120, 22);
         panel.add(lblNewLabel_1);
@@ -93,7 +87,7 @@ public class gui {
         uniqueWordField.setBounds(148, 192, 116, 22);
         panel.add(uniqueWordField);
 
-        btnRun = new JButton("Run");
+        btnRun = new JButton("Setup Filter");
         btnRun.setBounds(167, 247, 97, 25);
         panel.add(btnRun);
 
@@ -103,12 +97,44 @@ public class gui {
         panel.add(checkTextLabel);
 
         JLabel programStatusLabel = new JLabel("Status:");
-        programStatusLabel.setBounds(22, 331, 61, 25);
+        programStatusLabel.setBounds(101, 284, 61, 25);
         panel.add(programStatusLabel);
 
         statusText = new JLabel("");
-        statusText.setBounds(106, 335, 56, 16);
+        statusText.setBounds(177, 288, 87, 16);
         panel.add(statusText);
+
+        hitCountLabel = new JLabel("Hit Count");
+        hitCountLabel.setBounds(12, 453, 73, 16);
+        panel.add(hitCountLabel);
+
+        btnRunSimulation = new JButton("Run Simulation");
+        btnRunSimulation.setBounds(101, 404, 132, 25);
+        panel.add(btnRunSimulation);
+
+        JLabel lblTryCount = new JLabel("Try Count:");
+        lblTryCount.setBounds(12, 360, 87, 16);
+        panel.add(lblTryCount);
+
+        checkSimulationTryCount = new JTextField();
+        checkSimulationTryCount.setBounds(106, 357, 116, 22);
+        panel.add(checkSimulationTryCount);
+        checkSimulationTryCount.setColumns(10);
+
+        hitCount = new JLabel("");
+        hitCount.setBounds(106, 453, 56, 16);
+        panel.add(hitCount);
+    }
+
+    public void setHitCount(int count){
+        this.hitCount.setText(count+"");
+    }
+    public String getCheckTryCount(){
+        return checkSimulationTryCount.getText();
+    }
+
+    public void setcheckSimulationButtonListener(ActionListener a){
+        this.btnRunSimulation.addActionListener(a);
     }
 
     public void setCheckTextStatus(String text){
@@ -138,9 +164,6 @@ public class gui {
     }
     public boolean getUseMurmur3(){
         return checkBoxUseMurmur3.isSelected();
-    }
-    public int getFilterThreshold(){
-        return Integer.parseInt(resetThreshold.getText());
     }
     public int getFilterSize(){
         return Integer.parseInt(filterSizeField.getText());

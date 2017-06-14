@@ -19,6 +19,7 @@ public class Filter {
     boolean useMurmur2;
     boolean useMurmur3;
     long seed;
+    int HashCount;
 
     //Allow seed to be set for testing
     public Filter(int filterSize, int randomSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, long seed, int uniqueInserts){
@@ -33,6 +34,17 @@ public class Filter {
         this.useMurmur2 = useMurmur2;
         this.useMurmur3 = useMurmur3;
 
+        HashCount=0;
+        if(this.useMurmur1){
+            HashCount ++;
+        }
+        if(this.useMurmur2){
+            HashCount ++;
+        }
+        if(this.useMurmur3){
+            HashCount ++;
+        }
+
         this.seed = seed;
 
         this.uniqueInserts = uniqueInserts;
@@ -41,6 +53,10 @@ public class Filter {
     }
     public Filter(int filterSize, int randomSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, int uniqueInserts){
         this(filterSize, randomSize, useMurmur1, useMurmur2,useMurmur3,(new Random()).nextLong(), uniqueInserts);
+    }
+
+    public double getFalsePositiveCount(){
+        return Math.pow(1 - Math.pow(Math.E , ((this.HashCount * this.actualList.size())/this.bloomFilter.length)), this.HashCount);
     }
 
     private void add(int value){
@@ -91,7 +107,7 @@ public class Filter {
                 }
             }
         }
-        return (new int[]{countInSet, falsePositive});
+        return (new int[]{countInSet, falsePositive, (falsePositive/tryCount)});
     }
 
     public void insert(int value){

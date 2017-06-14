@@ -40,7 +40,7 @@ public class gui {
      */
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 878, 654);
+        frame.setBounds(100, 100, 400, 654);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -69,7 +69,11 @@ public class gui {
         checkBoxUseMurmur3.setBounds(151, 86, 113, 25);
         panel.add(checkBoxUseMurmur3);
 
-        JLabel lblNewLabel_1 = new JLabel("Size Of Model.Filter");
+        JLabel filterSizeLabel = new JLabel("Size Of Model Filter");
+        filterSizeLabel.setBounds(8, 163, 120, 22);
+        panel.add(filterSizeLabel);
+
+        JLabel lblNewLabel_1 = new JLabel("Size Of Model Filter");
         lblNewLabel_1.setBounds(8, 163, 120, 22);
         panel.add(lblNewLabel_1);
 
@@ -88,7 +92,7 @@ public class gui {
         panel.add(uniqueWordField);
 
         btnRun = new JButton("Setup Filter");
-        btnRun.setBounds(167, 247, 97, 25);
+        btnRun.setBounds(148, 255, 116, 25);
         panel.add(btnRun);
 
         checkTextLabel = new JLabel("");
@@ -97,23 +101,19 @@ public class gui {
         panel.add(checkTextLabel);
 
         JLabel programStatusLabel = new JLabel("Status:");
-        programStatusLabel.setBounds(101, 284, 61, 25);
+        programStatusLabel.setBounds(8, 284, 61, 25);
         panel.add(programStatusLabel);
 
         statusText = new JLabel("");
-        statusText.setBounds(177, 288, 87, 16);
+        statusText.setBounds(75, 288, 400, 16);
         panel.add(statusText);
 
         hitCountLabel = new JLabel("Hit Count");
-        hitCountLabel.setBounds(12, 453, 73, 16);
+        hitCountLabel.setBounds(8, 453, 73, 16);
         panel.add(hitCountLabel);
 
-        btnRunSimulation = new JButton("Run Simulation");
-        btnRunSimulation.setBounds(101, 404, 132, 25);
-        panel.add(btnRunSimulation);
-
         JLabel lblTryCount = new JLabel("Try Count:");
-        lblTryCount.setBounds(12, 360, 87, 16);
+        lblTryCount.setBounds(8, 360, 87, 16);
         panel.add(lblTryCount);
 
         checkSimulationTryCount = new JTextField();
@@ -121,16 +121,20 @@ public class gui {
         panel.add(checkSimulationTryCount);
         checkSimulationTryCount.setColumns(10);
 
+        btnRunSimulation = new JButton("Run Simulation");
+        btnRunSimulation.setBounds(100, 404, 132, 25);
+        panel.add(btnRunSimulation);
+
         hitCount = new JLabel("");
-        hitCount.setBounds(106, 453, 56, 16);
+        hitCount.setBounds(160, 453, 56, 16);
         panel.add(hitCount);
 
         falsePositiveCount = new JLabel("");
-        falsePositiveCount.setBounds(106, 482, 91, 16);
+        falsePositiveCount.setBounds(160, 482, 91, 16);
         panel.add(falsePositiveCount);
 
         falsePositivePercentage = new JLabel("");
-        falsePositivePercentage.setBounds(106, 512, 56, 16);
+        falsePositivePercentage.setBounds(160, 512, 56, 16);
         panel.add(falsePositivePercentage);
 
         JLabel falsePositivePercentageLabel = new JLabel("Percentage");
@@ -138,11 +142,11 @@ public class gui {
         panel.add(falsePositivePercentageLabel);
 
         statisticFalsePositive = new JLabel("");
-        statisticFalsePositive.setBounds(106, 550, 56, 16);
+        statisticFalsePositive.setBounds(160, 540, 56, 16);
         panel.add(statisticFalsePositive);
 
-        JLabel statisticFalsePositiveLabel = new JLabel("Statistical");
-        statisticFalsePositiveLabel.setBounds(8, 550, 91, 16);
+        JLabel statisticFalsePositiveLabel = new JLabel("Statistical Hit Chance");
+        statisticFalsePositiveLabel.setBounds(8, 540, 130, 16);
         panel.add(statisticFalsePositiveLabel);
 
         JLabel falsePositiveCountLabel = new JLabel("False Positives");
@@ -165,12 +169,9 @@ public class gui {
         this.falsePositiveCount.setText(count[1]+"");
         this.falsePositivePercentage.setText(count[2]+"%");
     }
+
     public void setStatisticFalsePositive(int falsePositive){
         this.statisticFalsePositive.setText(falsePositive + "%");
-    }
-
-    public String getCheckTryCount(){
-        return checkSimulationTryCount.getText();
     }
 
     public void setcheckSimulationButtonListener(ActionListener a){
@@ -179,9 +180,6 @@ public class gui {
 
     public void setCheckTextStatus(String text){
         this.checkTextLabel.setText(text);
-    }
-    public String getCheckText(){
-        return checkTextInput.getText();
     }
 
     public void setProgramStatus(String text){
@@ -213,4 +211,11 @@ public class gui {
     public int getUniqueWordCount(){
         return Integer.parseInt(uniqueWordField.getText());
     }
+    public String getCheckText(){
+        return checkTextInput.getText();
+    }
+    public String getCheckTryCount(){
+        return checkSimulationTryCount.getText();
+    }
+
 }

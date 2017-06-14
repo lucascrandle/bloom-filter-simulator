@@ -21,14 +21,10 @@ public class Filter {
     long seed;
 
     //Allow seed to be set for testing
-    public Filter(int filterSize, int randomSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, long seed, int uniqueInserts){
-        actualList = new ArrayList<Integer>();
-        bloomFilter = new boolean[filterSize];
-
-        this.randomSize = randomSize;
-
-        this.filterSize = filterSize;
-
+    public Filter(int filterSize, int randomSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, long seed, int uniqueInserts) throws Exception {
+        if(uniqueInserts > randomSize){
+            this.moreUniqueInsertsThanAllowed();
+        }
         this.useMurmur1 = useMurmur1;
         this.useMurmur2 = useMurmur2;
         this.useMurmur3 = useMurmur3;
@@ -43,22 +39,38 @@ public class Filter {
         if(this.useMurmur3){
             HashCount ++;
         }
+        if(HashCount == 0){
+            this.throwNoMurmorSelected();
+        }
+        actualList = new ArrayList<Integer>();
+        bloomFilter = new boolean[filterSize];
 
+        this.randomSize = randomSize;
+
+        this.filterSize = filterSize;
         this.seed = seed;
 
         this.uniqueInserts = uniqueInserts;
 
         System.out.println("Created filter with Size: " + filterSize);
     }
-    public Filter(int filterSize, int randomSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, int uniqueInserts){
+    public Filter(int filterSize, int randomSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, int uniqueInserts) throws Exception {
         this(filterSize, randomSize, useMurmur1, useMurmur2,useMurmur3,(new Random()).nextLong(), uniqueInserts);
+    }
+
+    private void throwNoMurmorSelected() throws Exception {
+        throw new Exception("Need to Select at least one murmor function.");
+    }
+
+    private void moreUniqueInsertsThanAllowed() throws Exception {
+        throw new Exception("Make Unique Inserts =< Random Size");
     }
 
     public int getFalsePositiveCount(){
         return (int)(100 * Math.pow(1 - Math.pow(Math.E , ((-this.HashCount * this.uniqueInserts)/this.filterSize)), this.HashCount));
     }
 
-    private boolean add(int value){
+    private boolean addValueToActualList(int value){
 //        System.out.println("Inserting Int: " + value);
         //leverage bloom filter to skip checking for multiple inserts.
         if(!this.testFilter(value)){
@@ -115,7 +127,7 @@ public class Filter {
     }
 
     public boolean insert(int value){
-        if(add(value)){
+        if(addValueToActualList(value)){
             //        System.out.println("Size: " + this.actualList.size());
             byte[] bytes;
 

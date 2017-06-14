@@ -24,18 +24,24 @@ public class Application {
             Application a = new Application(g);
         }else{
             if(args.length == 7){
-                int filterSize = Integer.parseInt(args[0]);
-                int randomSize = Integer.parseInt(args[1]);
-                boolean useMurmur1 =  new Boolean(args[2]);
-                boolean useMurmur2 =  new Boolean(args[3]);
-                boolean useMurmur3 =  new Boolean(args[4]);
-                int uniqueInserts = Integer.parseInt(args[5]);
-                int checkCount = Integer.parseInt(args[6]);
-                System.out.println(checkCount);
-                Filter f = new Filter(filterSize, randomSize, useMurmur1, useMurmur2, useMurmur3, uniqueInserts);
-                f.runSimulation();
-                int[] results = f.runCheckSimulation(checkCount);
-                System.out.println("Check Count: " + results[0] + " false Positive: " + results[1]);
+                try {
+                    int filterSize = Integer.parseInt(args[0]);
+                    int randomSize = Integer.parseInt(args[1]);
+                    boolean useMurmur1 =  new Boolean(args[2]);
+                    boolean useMurmur2 =  new Boolean(args[3]);
+                    boolean useMurmur3 =  new Boolean(args[4]);
+                    int uniqueInserts = Integer.parseInt(args[5]);
+                    int checkCount = Integer.parseInt(args[6]);
+                    Filter f = new Filter(filterSize, randomSize, useMurmur1, useMurmur2, useMurmur3, uniqueInserts);
+                    f.runSimulation();
+                    int[] results = f.runCheckSimulation(checkCount);
+                    System.out.println("Check Count: " + results[0] + " false Positive: " + results[1]);
+
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                }
+
             }else{
                 System.out.println("Incorrect Numbers of Args");
             }
@@ -52,11 +58,17 @@ public class Application {
     public void setupListeners(){
         g.setRunButtonListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                g.setProgramStatus("Running...");
-                f = new Filter(g.getFilterSize(), g.getRandomSize(), g.getUseMurmur1(), g.getUseMurmur2(), g.getUseMurmur3(), g.getUniqueWordCount());
-                f.runSimulation();
-                g.setStatisticFalsePositive(f.getFalsePositiveCount());
-                g.setProgramStatus("Complete");
+                try {
+                    g.setProgramStatus("Running...");
+
+                    f = new Filter(g.getFilterSize(), g.getRandomSize(), g.getUseMurmur1(), g.getUseMurmur2(), g.getUseMurmur3(), g.getUniqueWordCount());
+                    f.runSimulation();
+                    g.setStatisticFalsePositive(f.getFalsePositiveCount());
+                    g.setProgramStatus("Complete");
+                }catch (Exception ex){
+                    g.setProgramStatus(ex.getMessage());
+                    ex.printStackTrace();
+                }
             }
         });
 

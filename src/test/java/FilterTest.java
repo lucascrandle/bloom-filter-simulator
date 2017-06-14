@@ -23,7 +23,7 @@ public class FilterTest {
         this.randomSeed = r.nextLong();
     }
     @Test
-    public void AddItemToFilter() {
+    public void AddItemToFilter() throws Exception{
         int randomSize = 100000;
         this.f = new Filter(1000, randomSize, true, true, true,100, 100);
         this.f.insert(127127127);
@@ -32,7 +32,7 @@ public class FilterTest {
     }
 
     @Test
-    public void checkMurmur1hash(){
+    public void checkMurmur1hash() throws Exception {
         int testVal = 111111111;
         int randomSize = 100000;
         int filterSize = 10;
@@ -45,7 +45,7 @@ public class FilterTest {
     }
 
     @Test
-    public void checkMurmur2hash(){
+    public void checkMurmur2hash() throws Exception {
         int testVal = 111111111;
         int randomSize = 100000;
         int filterSize = 10;
@@ -56,7 +56,7 @@ public class FilterTest {
     }
 
     @Test
-    public void checkMurmur3hash(){
+    public void checkMurmur3hash() throws Exception {
         int testVal = 111111111;
         int randomSize = 100000;
         int filterSize = 10;

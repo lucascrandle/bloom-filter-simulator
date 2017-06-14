@@ -20,7 +20,7 @@ public class gui {
     private JTextField checkSimulationTryCount,randomSizeField;
     private JLabel checkTextLabel;
     private JLabel statusText;
-    private JLabel hitCountLabel, hitCount, falsePositiveCount;
+    private JLabel hitCountLabel, hitCount, falsePositiveCount, falsePositivePercentage, statisticFalsePositive;
     private JCheckBox checkBoxUseMurmur1;
     private JCheckBox checkBoxUseMurmur2;
     private JCheckBox checkBoxUseMurmur3;
@@ -49,9 +49,13 @@ public class gui {
         panel.setLayout(null);
 
         checkTextInput = new JTextField();
-        checkTextInput.setBounds(106, 523, 240, 22);
+        checkTextInput.setBounds(106, 570 , 240, 22);
         panel.add(checkTextInput);
         checkTextInput.setColumns(10);
+
+        JLabel lblCheckWord = new JLabel("Check Word:");
+        lblCheckWord.setBounds(8, 570, 91, 16);
+        panel.add(lblCheckWord);
 
         checkBoxUseMurmur1 = new JCheckBox("Use Murmur 1");
         checkBoxUseMurmur1.setBounds(151, 26, 113, 25);
@@ -64,10 +68,6 @@ public class gui {
         checkBoxUseMurmur3 = new JCheckBox("Use Murmur 3");
         checkBoxUseMurmur3.setBounds(151, 86, 113, 25);
         panel.add(checkBoxUseMurmur3);
-
-        JLabel lblCheckWord = new JLabel("Check Word:");
-        lblCheckWord.setBounds(8, 526, 91, 16);
-        panel.add(lblCheckWord);
 
         JLabel lblNewLabel_1 = new JLabel("Size Of Model.Filter");
         lblNewLabel_1.setBounds(8, 163, 120, 22);
@@ -91,9 +91,9 @@ public class gui {
         btnRun.setBounds(167, 247, 97, 25);
         panel.add(btnRun);
 
-        checkTextLabel = new JLabel("Check Text");
+        checkTextLabel = new JLabel("");
         checkTextLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        checkTextLabel.setBounds(106, 558, 240, 16);
+        checkTextLabel.setBounds(106, 575, 240, 16);
         panel.add(checkTextLabel);
 
         JLabel programStatusLabel = new JLabel("Status:");
@@ -126,8 +126,24 @@ public class gui {
         panel.add(hitCount);
 
         falsePositiveCount = new JLabel("");
-        falsePositiveCount.setBounds(106, 482, 56, 16);
+        falsePositiveCount.setBounds(106, 482, 91, 16);
         panel.add(falsePositiveCount);
+
+        falsePositivePercentage = new JLabel("");
+        falsePositivePercentage.setBounds(106, 512, 56, 16);
+        panel.add(falsePositivePercentage);
+
+        JLabel falsePositivePercentageLabel = new JLabel("Percentage");
+        falsePositivePercentageLabel.setBounds(8, 512, 91, 16);
+        panel.add(falsePositivePercentageLabel);
+
+        statisticFalsePositive = new JLabel("");
+        statisticFalsePositive.setBounds(106, 550, 56, 16);
+        panel.add(statisticFalsePositive);
+
+        JLabel statisticFalsePositiveLabel = new JLabel("Statistical");
+        statisticFalsePositiveLabel.setBounds(8, 550, 91, 16);
+        panel.add(statisticFalsePositiveLabel);
 
         JLabel falsePositiveCountLabel = new JLabel("False Positives");
         falsePositiveCountLabel.setBounds(8, 482, 91, 16);
@@ -147,7 +163,12 @@ public class gui {
     public void setCheckSimulationVariables(int[] count){
         this.hitCount.setText(count[0]+"");
         this.falsePositiveCount.setText(count[1]+"");
+        this.falsePositivePercentage.setText(count[2]+"%");
     }
+    public void setStatisticFalsePositive(int falsePositive){
+        this.statisticFalsePositive.setText(falsePositive + "%");
+    }
+
     public String getCheckTryCount(){
         return checkSimulationTryCount.getText();
     }

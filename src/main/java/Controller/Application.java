@@ -55,6 +55,7 @@ public class Application {
                 g.setProgramStatus("Running...");
                 f = new Filter(g.getFilterSize(), g.getRandomSize(), g.getUseMurmur1(), g.getUseMurmur2(), g.getUseMurmur3(), g.getUniqueWordCount());
                 f.runSimulation();
+                g.setStatisticFalsePositive(f.getFalsePositiveCount());
                 g.setProgramStatus("Complete");
             }
         });
@@ -84,6 +85,7 @@ public class Application {
             public void actionPerformed(ActionEvent e) {
                 try {
                     g.setCheckSimulationVariables(f.runCheckSimulation(Integer.parseInt(g.getCheckTryCount())));
+
                 }catch(Exception exc){
                     g.setCheckTextStatus("Invalid try Count");
                 }

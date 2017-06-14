@@ -14,12 +14,11 @@ import com.sangupta.murmur.Murmur3;
 public class Filter {
     ArrayList<Integer> actualList;
     boolean[] bloomFilter;
-    int filterSize, randomSize,uniqueInserts;
+    int filterSize, randomSize,uniqueInserts,HashCount;
     boolean useMurmur1;
     boolean useMurmur2;
     boolean useMurmur3;
     long seed;
-    int HashCount;
 
     //Allow seed to be set for testing
     public Filter(int filterSize, int randomSize, boolean useMurmur1, boolean useMurmur2, boolean useMurmur3, long seed, int uniqueInserts){
@@ -55,8 +54,8 @@ public class Filter {
         this(filterSize, randomSize, useMurmur1, useMurmur2,useMurmur3,(new Random()).nextLong(), uniqueInserts);
     }
 
-    public double getFalsePositiveCount(){
-        return Math.pow(1 - Math.pow(Math.E , ((this.HashCount * this.actualList.size())/this.bloomFilter.length)), this.HashCount);
+    public int getFalsePositiveCount(){
+        return (int)(100 * Math.pow(1 - Math.pow(Math.E , ((-this.HashCount * this.uniqueInserts)/this.filterSize)), this.HashCount));
     }
 
     private void add(int value){
@@ -107,7 +106,7 @@ public class Filter {
                 }
             }
         }
-        return (new int[]{countInSet, falsePositive, (falsePositive/tryCount)});
+        return (new int[]{countInSet, falsePositive, (100 * falsePositive/tryCount)});
     }
 
     public void insert(int value){

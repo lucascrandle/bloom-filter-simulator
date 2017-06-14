@@ -58,16 +58,19 @@ public class Filter {
         return (int)(100 * Math.pow(1 - Math.pow(Math.E , ((-this.HashCount * this.uniqueInserts)/this.filterSize)), this.HashCount));
     }
 
-    private void add(int value){
+    private boolean add(int value){
 //        System.out.println("Inserting Int: " + value);
         //leverage bloom filter to skip checking for multiple inserts.
         if(!this.testFilter(value)){
             if(!this.contains(value)){
                 this.actualList.add(value);
+                return true;
             }
         }else{
             this.actualList.add(value);
+            return true;
         }
+        return false;
     }
 
     public String checkInput(String input){
@@ -86,8 +89,10 @@ public class Filter {
         int x = 0;
         Random r = new Random(System.currentTimeMillis());
         while(x < this.uniqueInserts){
-            this.insert(r.nextInt(randomSize));
-            x++;
+            if(this.insert(r.nextInt(randomSize))){
+                x++;
+            }
+
         }
     }
 
@@ -109,18 +114,22 @@ public class Filter {
         return (new int[]{countInSet, falsePositive, (100 * falsePositive/tryCount)});
     }
 
-    public void insert(int value){
-        add(value);
-//        System.out.println("Size: " + this.actualList.size());
-        byte[] bytes;
+    public boolean insert(int value){
+        if(add(value)){
+            //        System.out.println("Size: " + this.actualList.size());
+            byte[] bytes;
 
-        bytes = BigInteger.valueOf(value).toByteArray();
-        if(useMurmur1)
-            setFilterFlag((int)(Murmur1.hash(bytes, bytes.length, seed) % this.filterSize));
-        if(useMurmur2)
-            setFilterFlag((int)(Murmur2.hash(bytes, bytes.length, seed) % this.filterSize));
-        if(useMurmur3)
-            setFilterFlag((int)(Murmur3.hash_x86_32(bytes, bytes.length, seed) % this.filterSize));
+            bytes = BigInteger.valueOf(value).toByteArray();
+            if(useMurmur1)
+                setFilterFlag((int)(Murmur1.hash(bytes, bytes.length, seed) % this.filterSize));
+            if(useMurmur2)
+                setFilterFlag((int)(Murmur2.hash(bytes, bytes.length, seed) % this.filterSize));
+            if(useMurmur3)
+                setFilterFlag((int)(Murmur3.hash_x86_32(bytes, bytes.length, seed) % this.filterSize));
+            return true;
+        }
+        return false;
+
 
     }
 

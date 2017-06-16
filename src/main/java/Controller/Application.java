@@ -23,6 +23,7 @@ public class Application {
             gui g = new gui();
             Application a = new Application(g);
         }else{
+            /** Command Line Support */
             if(args.length == 7){
                 try {
                     int filterSize = Integer.parseInt(args[0]);
@@ -47,14 +48,23 @@ public class Application {
             }
         }
     }
+
     public Application(gui g){
         this.setGui(g);
         this.setupListeners();
     }
+
+    /**
+     * Set the gui for the application
+     * @param g The gui to set.
+     */
     public void setGui(gui g){
         this.g = g;
     }
 
+    /**
+     * Setup the button listeners
+     */
     public void setupListeners(){
         g.setRunButtonListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -103,10 +113,6 @@ public class Application {
                 }
             }
         });
-
-    }
-
-    public void runListener(){
 
     }
 

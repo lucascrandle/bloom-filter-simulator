@@ -137,8 +137,8 @@ public class gui {
         falsePositivePercentage.setBounds(160, 512, 56, 16);
         panel.add(falsePositivePercentage);
 
-        JLabel falsePositivePercentageLabel = new JLabel("Percentage");
-        falsePositivePercentageLabel.setBounds(8, 512, 91, 16);
+        JLabel falsePositivePercentageLabel = new JLabel("Percentage Of Hits");
+        falsePositivePercentageLabel.setBounds(20, 512, 120, 16);
         panel.add(falsePositivePercentageLabel);
 
         statisticFalsePositive = new JLabel("");

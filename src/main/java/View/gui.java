@@ -1,5 +1,7 @@
 package View;
 
+import Model.statisticValues;
+
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentListener;
@@ -13,19 +15,10 @@ import java.awt.event.ActionListener;
 public class gui {
 
     private JFrame frame;
-    private JTextField checkTextInput;
-    private JTextField textField_1;
-    private JTextField filterSizeField;
-    private JTextField uniqueWordField;
-    private JTextField checkSimulationTryCount,randomSizeField;
-    private JLabel checkTextLabel;
-    private JLabel statusText;
-    private JLabel hitCountLabel, hitCount, falsePositiveCount, falsePositivePercentage, statisticFalsePositive;
-    private JCheckBox checkBoxUseMurmur1;
-    private JCheckBox checkBoxUseMurmur2;
-    private JCheckBox checkBoxUseMurmur3;
-    private JButton btnRun;
-    private JButton btnRunSimulation;
+    private JTextField uniqueWordField,filterSizeField,checkTextInput, checkSimulationTryCount,randomSizeField;
+    private JLabel notInSetCount,statusText,checkTextLabel, hitCountLabel, hitCount, falsePositiveCount, falsePositivePercentage, statisticFalsePositive;
+    private JCheckBox checkBoxUseMurmur1, checkBoxUseMurmur2, checkBoxUseMurmur3;
+    private JButton btnRunSimulation, btnRun;
 
     /**
      * Create the application.
@@ -40,22 +33,13 @@ public class gui {
      */
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 400, 654);
+        frame.setBounds(100, 100, 400, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
         JPanel panel = new JPanel();
         frame.getContentPane().add(panel, BorderLayout.CENTER);
         panel.setLayout(null);
-
-        checkTextInput = new JTextField();
-        checkTextInput.setBounds(106, 570 , 240, 22);
-        panel.add(checkTextInput);
-        checkTextInput.setColumns(10);
-
-        JLabel lblCheckWord = new JLabel("Check Word:");
-        lblCheckWord.setBounds(8, 570, 91, 16);
-        panel.add(lblCheckWord);
 
         checkBoxUseMurmur1 = new JCheckBox("Use Murmur 1");
         checkBoxUseMurmur1.setBounds(151, 26, 113, 25);
@@ -73,10 +57,6 @@ public class gui {
         filterSizeLabel.setBounds(8, 163, 120, 22);
         panel.add(filterSizeLabel);
 
-        JLabel lblNewLabel_1 = new JLabel("Size Of Model Filter");
-        lblNewLabel_1.setBounds(8, 163, 120, 22);
-        panel.add(lblNewLabel_1);
-
         filterSizeField = new JTextField();
         filterSizeField.setColumns(10);
         filterSizeField.setBounds(148, 163, 116, 22);
@@ -90,6 +70,14 @@ public class gui {
         uniqueWordField.setColumns(10);
         uniqueWordField.setBounds(148, 192, 116, 22);
         panel.add(uniqueWordField);
+
+        JLabel lblNewLabel_4 = new JLabel("Random Size");
+        lblNewLabel_4.setBounds(8, 224, 113, 16);
+        panel.add(lblNewLabel_4);
+
+        randomSizeField = new JTextField();
+        randomSizeField.setBounds(148, 221, 116, 22);
+        panel.add(randomSizeField);
 
         btnRun = new JButton("Setup Filter");
         btnRun.setBounds(148, 255, 116, 25);
@@ -108,9 +96,7 @@ public class gui {
         statusText.setBounds(75, 288, 400, 16);
         panel.add(statusText);
 
-        hitCountLabel = new JLabel("Hit Count");
-        hitCountLabel.setBounds(8, 453, 73, 16);
-        panel.add(hitCountLabel);
+
 
         JLabel lblTryCount = new JLabel("Try Count:");
         lblTryCount.setBounds(8, 360, 87, 16);
@@ -125,49 +111,64 @@ public class gui {
         btnRunSimulation.setBounds(100, 404, 132, 25);
         panel.add(btnRunSimulation);
 
+        /** Output Fields */
+
+        hitCountLabel = new JLabel("Hit Count");
+        hitCountLabel.setBounds(8, 453, 73, 16);
+        panel.add(hitCountLabel);
+
         hitCount = new JLabel("");
         hitCount.setBounds(160, 453, 56, 16);
         panel.add(hitCount);
 
-        falsePositiveCount = new JLabel("");
-        falsePositiveCount.setBounds(160, 482, 91, 16);
-        panel.add(falsePositiveCount);
+        JLabel notInSetCountLabel = new JLabel("Not in Set");
+        notInSetCountLabel.setBounds(8,482,91,16);
+        panel.add(notInSetCountLabel);
 
-        falsePositivePercentage = new JLabel("");
-        falsePositivePercentage.setBounds(160, 512, 56, 16);
-        panel.add(falsePositivePercentage);
-
-        JLabel falsePositivePercentageLabel = new JLabel("Percentage Of Hits");
-        falsePositivePercentageLabel.setBounds(20, 512, 120, 16);
-        panel.add(falsePositivePercentageLabel);
-
-        statisticFalsePositive = new JLabel("");
-        statisticFalsePositive.setBounds(160, 540, 56, 16);
-        panel.add(statisticFalsePositive);
-
-        JLabel statisticFalsePositiveLabel = new JLabel("Statistical Hit Chance");
-        statisticFalsePositiveLabel.setBounds(8, 540, 130, 16);
-        panel.add(statisticFalsePositiveLabel);
+        notInSetCount = new JLabel("");
+        notInSetCount.setBounds(160, 482, 91, 16);
+        panel.add(notInSetCount);
 
         JLabel falsePositiveCountLabel = new JLabel("False Positives");
-        falsePositiveCountLabel.setBounds(8, 482, 91, 16);
+        falsePositiveCountLabel.setBounds(8, 512, 91, 16);
         panel.add(falsePositiveCountLabel);
 
-        JLabel lblNewLabel_4 = new JLabel("Random Size");
-        lblNewLabel_4.setBounds(8, 224, 113, 16);
-        panel.add(lblNewLabel_4);
+        falsePositiveCount = new JLabel("");
+        falsePositiveCount.setBounds(160, 512, 91, 16);
+        panel.add(falsePositiveCount);
 
-        randomSizeField = new JTextField();
-        randomSizeField.setBounds(148, 221, 116, 22);
-        panel.add(randomSizeField);
-        randomSizeField.setColumns(10);
+        JLabel falsePositivePercentageLabel = new JLabel("Percentage Of Hits");
+        falsePositivePercentageLabel.setBounds(20, 540, 120, 16);
+        panel.add(falsePositivePercentageLabel);
+
+        falsePositivePercentage = new JLabel("");
+        falsePositivePercentage.setBounds(160, 540, 56, 16);
+        panel.add(falsePositivePercentage);
+
+        JLabel statisticFalsePositiveLabel = new JLabel("Statistical Hit Chance");
+        statisticFalsePositiveLabel.setBounds(8, 570, 130, 16);
+        panel.add(statisticFalsePositiveLabel);
+
+        statisticFalsePositive = new JLabel("");
+        statisticFalsePositive.setBounds(160, 570, 56, 16);
+        panel.add(statisticFalsePositive);
+
+        checkTextInput = new JTextField();
+        checkTextInput.setBounds(106, 600 , 240, 22);
+        panel.add(checkTextInput);
+        checkTextInput.setColumns(10);
+
+        JLabel lblCheckWord = new JLabel("Check Word:");
+        lblCheckWord.setBounds(8, 600, 91, 16);
+        panel.add(lblCheckWord);
 
     }
 
-    public void setCheckSimulationVariables(int[] count){
-        this.hitCount.setText(count[0]+"");
-        this.falsePositiveCount.setText(count[1]+"");
-        this.falsePositivePercentage.setText(count[2]+"%");
+    public void setCheckSimulationVariables(statisticValues sv){
+        this.hitCount.setText(sv.countInSet+"");
+        this.falsePositiveCount.setText(sv.falsePositives +"");
+        this.falsePositivePercentage.setText(sv.falsePositivePercentage + "%" );
+        this.notInSetCount.setText(sv.attemptsNotInSet + "");
     }
 
     public void setStatisticFalsePositive(int falsePositive){

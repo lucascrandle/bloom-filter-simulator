@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Filter;
+import Model.statisticValues;
 import View.gui;
 
 import javax.swing.event.ChangeEvent;
@@ -35,8 +36,8 @@ public class Application {
                     int checkCount = Integer.parseInt(args[6]);
                     Filter f = new Filter(filterSize, randomSize, useMurmur1, useMurmur2, useMurmur3, uniqueInserts);
                     f.runSimulation();
-                    int[] results = f.runCheckSimulation(checkCount);
-                    System.out.println("Check Count: " + results[0] + " false Positive: " + results[1]);
+                    statisticValues results = f.runCheckSimulation(checkCount);
+                    System.out.println("Check Count: " + results.countInSet+ " false Positive: " + results.falsePositives);
 
                 }catch (Exception e){
                     System.out.println(e.getMessage());

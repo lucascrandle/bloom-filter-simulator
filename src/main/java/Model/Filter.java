@@ -136,6 +136,9 @@ public class Filter {
             if(this.insert(newRandom)){
 //                System.out.println("Incrementing");
                 x++;
+                if(x % 100000 == 0){
+                    System.out.println("Inserted: " + x);
+                }
             }
 
         }
@@ -146,7 +149,7 @@ public class Filter {
      * @param tryCount Amount of random numbers to try and see if they are in the set.
      * @return int array containing [Amount of numbers that tested positive for the filter, the amount that were false positives, percentage that were false positives]
      */
-    public int[] runCheckSimulation(int tryCount){
+    public statisticValues runCheckSimulation(int tryCount){
         Random r = new Random(System.currentTimeMillis());
         int countInSet = 0;
         int falsePositive = 0;
@@ -155,13 +158,14 @@ public class Filter {
 //            System.out.println("Trying Int: " + nextIntTest);
             if(this.testFilter(nextIntTest)){
                 countInSet++;
+                /** Print Progress */
                 if(!this.contains(nextIntTest)){
                     falsePositive++;
 //                    System.out.println("contains");
                 }
             }
         }
-        return (new int[]{countInSet, falsePositive, (100 * falsePositive/countInSet)});
+        return (new statisticValues(countInSet, falsePositive, (tryCount - countInSet)));
     }
 
     /**

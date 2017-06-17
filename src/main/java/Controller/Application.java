@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Filter;
+import Model.statisticValues;
 import View.gui;
 
 import javax.swing.event.ChangeEvent;
@@ -23,37 +24,62 @@ public class Application {
             gui g = new gui();
             Application a = new Application(g);
         }else{
-            if(args.length == 6){
-                int filterSize = Integer.parseInt(args[0]);
-                boolean useMurmur1 =  new Boolean(args[1]);
-                boolean useMurmur2 =  new Boolean(args[2]);
-                boolean useMurmur3 =  new Boolean(args[3]);
-                int uniqueInserts = Integer.parseInt(args[4]);
-                int checkCount = Integer.parseInt(args[5]);
-                System.out.println(checkCount);
-                Filter f = new Filter(filterSize, useMurmur1, useMurmur2, useMurmur3, uniqueInserts);
-                f.runSimulation();
-                System.out.println("Check Count: " + f.runCheckSimulation(checkCount));
+            /** Command Line Support */
+            if(args.length == 7){
+                try {
+                    int filterSize = Integer.parseInt(args[0]);
+                    int randomSize = Integer.parseInt(args[1]);
+                    boolean useMurmur1 =  new Boolean(args[2]);
+                    boolean useMurmur2 =  new Boolean(args[3]);
+                    boolean useMurmur3 =  new Boolean(args[4]);
+                    int uniqueInserts = Integer.parseInt(args[5]);
+                    int checkCount = Integer.parseInt(args[6]);
+                    Filter f = new Filter(filterSize, randomSize, useMurmur1, useMurmur2, useMurmur3, uniqueInserts);
+                    f.runSimulation();
+                    statisticValues results = f.runCheckSimulation(checkCount);
+                    System.out.println("Check Count: " + results.countInSet+ " false Positive: " + results.falsePositives);
+
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                }
+
             }else{
                 System.out.println("Incorrect Numbers of Args");
             }
         }
     }
+
     public Application(gui g){
         this.setGui(g);
         this.setupListeners();
     }
+
+    /**
+     * Set the gui for the application
+     * @param g The gui to set.
+     */
     public void setGui(gui g){
         this.g = g;
     }
 
+    /**
+     * Setup the button listeners
+     */
     public void setupListeners(){
         g.setRunButtonListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                g.setProgramStatus("Running...");
-                f = new Filter(g.getFilterSize(), g.getUseMurmur1(), g.getUseMurmur2(), g.getUseMurmur3(), g.getUniqueWordCount());
-                f.runSimulation();
-                g.setProgramStatus("Complete");
+                try {
+                    g.setProgramStatus("Running...");
+
+                    f = new Filter(g.getFilterSize(), g.getRandomSize(), g.getUseMurmur1(), g.getUseMurmur2(), g.getUseMurmur3(), g.getUniqueWordCount());
+                    f.runSimulation();
+                    g.setStatisticFalsePositive(f.getFalsePositiveCount());
+                    g.setProgramStatus("Complete");
+                }catch (Exception ex){
+                    g.setProgramStatus(ex.getMessage());
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -81,16 +107,13 @@ public class Application {
         g.setcheckSimulationButtonListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    g.setHitCount(f.runCheckSimulation(Integer.parseInt(g.getCheckTryCount())));
+                    g.setCheckSimulationVariables(f.runCheckSimulation(Integer.parseInt(g.getCheckTryCount())));
+
                 }catch(Exception exc){
                     g.setCheckTextStatus("Invalid try Count");
                 }
             }
         });
-
-    }
-
-    public void runListener(){
 
     }
 

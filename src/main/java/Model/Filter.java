@@ -80,15 +80,10 @@ public class Filter {
      */
     public double getHitPercentage(){
         double k = this.HashCount;
-        System.out.println(k);
         double upExp = -1 * this.HashCount * this.uniqueInserts;
-        System.out.println(upExp);
         double Eexp = upExp/this.filterSize;
-        System.out.println(Eexp);
         double base = 1 - Math.pow(Math.E, Eexp);
-        System.out.println(base);
         double result = Math.pow(base, this.HashCount);
-        System.out.println(result);
         return result;
     }
     
@@ -96,9 +91,7 @@ public class Filter {
         double ranSize = this.randomSize;
         double uInserts = this.uniqueInserts;
         double chanceOfNotInSet = (ranSize - uInserts)/ranSize;
-        System.out.println(chanceOfNotInSet);
         double result = chanceOfNotInSet * this.getHitPercentage();
-        System.out.println(result);
         return result;
     }
 

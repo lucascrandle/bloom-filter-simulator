@@ -78,8 +78,28 @@ public class Filter {
      * Gets statistical chance that a random item will be a hit for the filter
      * @return int based on a percentage.
      */
-    public int getFalsePositiveCount(){
-        return (int)(100 * Math.pow(1 - Math.pow(Math.E , ((-this.HashCount * this.uniqueInserts)/this.filterSize)), this.HashCount));
+    public double getHitPercentage(){
+        double k = this.HashCount;
+        System.out.println(k);
+        double upExp = -1 * this.HashCount * this.uniqueInserts;
+        System.out.println(upExp);
+        double Eexp = upExp/this.filterSize;
+        System.out.println(Eexp);
+        double base = 1 - Math.pow(Math.E, Eexp);
+        System.out.println(base);
+        double result = Math.pow(base, this.HashCount);
+        System.out.println(result);
+        return result;
+    }
+    
+    public double getFalsePositivePercentage(){
+        double ranSize = this.randomSize;
+        double uInserts = this.uniqueInserts;
+        double chanceOfNotInSet = (ranSize - uInserts)/ranSize;
+        System.out.println(chanceOfNotInSet);
+        double result = chanceOfNotInSet * this.getHitPercentage();
+        System.out.println(result);
+        return result;
     }
 
     /**

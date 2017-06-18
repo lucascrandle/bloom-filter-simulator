@@ -8,6 +8,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 /**
  * Created by lucas.crandle on 5/25/2017.
@@ -16,7 +17,7 @@ public class gui {
 
     private JFrame frame;
     private JTextField uniqueWordField,filterSizeField,checkTextInput, checkSimulationTryCount,randomSizeField;
-    private JLabel notInSetCount,statusText,checkTextLabel, hitCountLabel, hitCount, falsePositiveCount, falsePositivePercentage, statisticFalsePositive;
+    private JLabel statisticFalsePositivePercentage, notInSetCount,statusText,checkTextLabel, hitCountLabel, hitCount, falsePositiveCount, falsePositivePercentage, statisticHitPercentage;
     private JCheckBox checkBoxUseMurmur1, checkBoxUseMurmur2, checkBoxUseMurmur3;
     private JButton btnRunSimulation, btnRun;
 
@@ -33,7 +34,7 @@ public class gui {
      */
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 400, 700);
+        frame.setBounds(100, 100, 400, 730);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -149,17 +150,25 @@ public class gui {
         statisticFalsePositiveLabel.setBounds(8, 570, 130, 16);
         panel.add(statisticFalsePositiveLabel);
 
-        statisticFalsePositive = new JLabel("");
-        statisticFalsePositive.setBounds(160, 570, 56, 16);
-        panel.add(statisticFalsePositive);
+        statisticHitPercentage = new JLabel("");
+        statisticHitPercentage.setBounds(160, 570, 56, 16);
+        panel.add(statisticHitPercentage);
+
+        JLabel statisticFalsePositivePercentageLabel = new JLabel("Statistical False Pos");
+        statisticFalsePositivePercentageLabel.setBounds(8, 600, 130, 16);
+        panel.add(statisticFalsePositivePercentageLabel);
+
+        statisticFalsePositivePercentage = new JLabel("");
+        statisticFalsePositivePercentage.setBounds(160, 600, 56, 16);
+        panel.add(statisticFalsePositivePercentage);
 
         checkTextInput = new JTextField();
-        checkTextInput.setBounds(106, 600 , 240, 22);
+        checkTextInput.setBounds(106, 630 , 240, 22);
         panel.add(checkTextInput);
         checkTextInput.setColumns(10);
 
         JLabel lblCheckWord = new JLabel("Check Word:");
-        lblCheckWord.setBounds(8, 600, 91, 16);
+        lblCheckWord.setBounds(8, 630, 91, 16);
         panel.add(lblCheckWord);
 
     }
@@ -171,8 +180,16 @@ public class gui {
         this.notInSetCount.setText(sv.attemptsNotInSet + "");
     }
 
-    public void setStatisticFalsePositive(int falsePositive){
-        this.statisticFalsePositive.setText(falsePositive + "%");
+    public void setStatisticHitPercentage(double hitPercentage){
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        this.statisticHitPercentage.setText(df.format(hitPercentage * 100) + "%");
+    }
+    
+    public void setStatisticFalsePositivePercentage(double falsePercentage){
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        this.statisticFalsePositivePercentage.setText(df.format(falsePercentage * 100) + "%");
     }
 
     public void setcheckSimulationButtonListener(ActionListener a){

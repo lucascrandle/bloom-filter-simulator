@@ -74,7 +74,8 @@ public class Application {
 
                     f = new Filter(g.getFilterSize(), g.getRandomSize(), g.getUseMurmur1(), g.getUseMurmur2(), g.getUseMurmur3(), g.getUniqueWordCount());
                     f.runSimulation();
-                    g.setStatisticFalsePositive(f.getFalsePositiveCount());
+                    g.setStatisticHitPercentage(f.getHitPercentage());
+                    g.setStatisticFalsePositivePercentage(f.getFalsePositivePercentage());
                     g.setProgramStatus("Complete");
                 }catch (Exception ex){
                     g.setProgramStatus(ex.getMessage());
